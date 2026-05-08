@@ -1,0 +1,35 @@
+# pack-refs with: peeled fully-peeled sorted 
+967c86e7269231b8a9b25bc9d2f2dd77a42c672c refs/remotes/origin/dependabot/cargo/ecc2/cargo-c20181c6b7
+649fa885dc1d06d2c8ce2c6f638080759be7ff42 refs/remotes/origin/dependabot/github_actions/actions/cache-5.0.5
+a77a000915a62711060a9993ced92c820547bde8 refs/remotes/origin/dependabot/github_actions/actions/setup-node-6.4.0
+e1d8e79bbd1f40962318a0568d0a4fc73fc579c3 refs/remotes/origin/dependabot/github_actions/pnpm/action-setup-6.0.5
+97e205548a70530857862e101102b889db74ab2e refs/remotes/origin/dependabot/npm_and_yarn/minor-and-patch-3f69d7fd6b
+a9392368329d37d54a5d027e11e91a0b12bf3fb4 refs/remotes/origin/dependabot/npm_and_yarn/types/node-25.6.0
+1a9a754682835a0dc097a5948883cb38054730cc refs/remotes/origin/dependabot/npm_and_yarn/typescript-6.0.2
+7992f8fcb8bfd2319de89c042b81ff84a91449ea refs/remotes/origin/feat/ecc2-board-observability-integration
+c7c7d37f2946d7497577408d19adaee6a8341ddc refs/remotes/origin/feat/ecc2-rc1-preview-surface
+4a9918db008d7db0a4b14a0e240cd72af28b4619 refs/remotes/origin/fix/bash-hook-dispatcher-forkstorm
+aaaf52fb1e447efe28f2257f77683e54a2c60ea0 refs/remotes/origin/fix/ecc2-session-adapter-lint
+fe40a3d27be8fe59480a7065cab9c770d21c8ba1 refs/remotes/origin/fix/ecc2-windows-release-test-newlines
+f92dc544c4b025a456b853a7497750b5b3d6cbcd refs/remotes/origin/fix/insaits-wrapper-fail-open-status
+b40de37ccb5c9b8696454e80b7ec7b490542f614 refs/remotes/origin/fix/insaits-wrapper-windows-shim
+015b00b8fc70dfeaaf6e6af72451b8ecf2d2b060 refs/remotes/origin/fix/mcp-health-crash-probe-timeout
+45a9bcf29572ee13508b1433ed2ddcbe63a8892b refs/remotes/origin/fix/pre-bash-quality-windows-shims
+841beea45cb25ba51f29fa45b7e272938d19b80a refs/remotes/origin/main
+ae2c063ddebccafec5ca4b2a7733ddd32361adb1 refs/tags/v0.6.0
+5010f82c3e2c823fd0def95843725eea6242c302 refs/tags/v1.0.0
+5c63fa9006ae4501a733a62786192bce084bc74d refs/tags/v1.1.0
+846ffb75da9a5f4e677d927af1ad4a1951652267 refs/tags/v1.10.0
+e7cb4428432a3362812da893fb841ba49244605f refs/tags/v1.2.0
+b0b7f5ea3928dba0abf4de4f301792f1e42abcf7 refs/tags/v1.3.0
+^6d440c036df2c1b2fec957627d1202c3708e0627
+c0fdd89c4957c2abcbe5cfe424027398b8e65fd1 refs/tags/v1.4.0
+e4e94a7e70f124caea5847fff5a644c988da7b90 refs/tags/v1.4.1
+8696ae072df9a3d3368d7818f7920387908b125c refs/tags/v1.5.0
+^6c2e0eace8eb9955be6c632a18f89b1a28f1a9a9
+c9dafdab0281ce7968875f0e9c4f831a6335cb56 refs/tags/v1.6.0
+^db27ba1eb225b0b945d6e1dd624afb2889ec85d3
+0edb09f60738196ee43ef247d6c66cecfdeb2826 refs/tags/v1.7.0
+^b3d3eac532dfb5bcce8689c8300a6e57763d1a43
+1797e79129adb5d28deef0e7ba26aa70d6d98591 refs/tags/v1.8.0
+29277ac273f294fd4804c35e43af9c8a5fc5ba9d refs/tags/v1.9.0

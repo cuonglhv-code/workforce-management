@@ -1,0 +1,330 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js node scripts/hooks/pre-bash-dispatcher.js"
+          }
+        ],
+        "description": "Consolidated Bash preflight dispatcher for quality, tmux, push, and GateGuard checks",
+        "id": "pre:bash:dispatcher"
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:write:doc-file-warning scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Doc file warning: warn about non-standard documentation files (exit code 0; warns only)",
+        "id": "pre:write:doc-file-warning"
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:edit-write:suggest-compact scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Suggest manual compaction at logical intervals",
+        "id": "pre:edit-write:suggest-compact"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:observe:continuous-learning scripts/hooks/run-with-flags.js standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Capture tool use observations for continuous learning",
+        "id": "pre:observe:continuous-learning"
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:governance-capture scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 10
+          }
+        ],
+        "description": "Capture governance events (secrets, policy violations, approval requests). Enable with ECC_GOVERNANCE_CAPTURE=1",
+        "id": "pre:governance-capture"
+      },
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:config-protection scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 5
+          }
+        ],
+        "description": "Block modifications to linter/formatter config files. Steers agent to fix code instead of weakening configs.",
+        "id": "pre:config-protection"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:mcp-health-check scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Check MCP server health before MCP tool execution and block unhealthy MCP calls",
+        "id": "pre:mcp-health-check"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:edit-write:gateguard-fact-force scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 5
+          }
+        ],
+        "description": "Fact-forcing gate: block first Edit/Write/MultiEdit per file and demand investigation (importers, data schemas, user instruction) before allowing",
+        "id": "pre:edit-write:gateguard-fact-force"
+      }
+    ],
+    "PreCompact": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js pre:compact scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Save state before context compaction",
+        "id": "pre:compact"
+      }
+    ],
+    "SessionStart": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js session:start scripts/hooks/session-start-bootstrap.js minimal,standard,strict"
+          }
+        ],
+        "description": "Load previous context and detect package manager on new session",
+        "id": "session:start"
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js node scripts/hooks/post-bash-dispatcher.js",
+            "async": true,
+            "timeout": 30
+          }
+        ],
+        "description": "Consolidated Bash postflight dispatcher for logging, PR, and build notifications",
+        "id": "post:bash:dispatcher"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:quality-gate scripts/hooks/run-with-flags.js standard,strict",
+            "async": true,
+            "timeout": 30
+          }
+        ],
+        "description": "Run quality gate checks after file edits",
+        "id": "post:quality-gate"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:edit:design-quality-check scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 10
+          }
+        ],
+        "description": "Warn when frontend edits drift toward generic template-looking UI",
+        "id": "post:edit:design-quality-check"
+      },
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:edit:accumulator scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Record edited JS/TS file paths for batch format+typecheck at Stop time",
+        "id": "post:edit:accumulator"
+      },
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:edit:console-warn scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Warn about console.log statements after edits",
+        "id": "post:edit:console-warn"
+      },
+      {
+        "matcher": "Bash|Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:governance-capture scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 10
+          }
+        ],
+        "description": "Capture governance events from tool outputs. Enable with ECC_GOVERNANCE_CAPTURE=1",
+        "id": "post:governance-capture"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:session-activity-tracker scripts/hooks/run-with-flags.js standard,strict",
+            "timeout": 10
+          }
+        ],
+        "description": "Track per-session tool calls and file activity for ECC2 metrics",
+        "id": "post:session-activity-tracker"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:observe:continuous-learning scripts/hooks/run-with-flags.js standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Capture tool use results for continuous learning",
+        "id": "post:observe:continuous-learning"
+      }
+    ],
+    "PostToolUseFailure": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js post:mcp-health-check scripts/hooks/run-with-flags.js standard,strict"
+          }
+        ],
+        "description": "Track failed MCP tool calls, mark unhealthy servers, and attempt reconnect",
+        "id": "post:mcp-health-check"
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:format-typecheck scripts/hooks/stop-format-typecheck.js minimal,standard,strict",
+            "timeout": 300
+          }
+        ],
+        "description": "Batch format (Biome/Prettier) and typecheck (tsc) all JS/TS files edited this response — runs once at Stop instead of after every Edit",
+        "id": "stop:format-typecheck"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:check-console-log scripts/hooks/check-console-log.js minimal,standard,strict"
+          }
+        ],
+        "description": "Check for console.log in modified files after each response",
+        "id": "stop:check-console-log"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:session-end scripts/hooks/session-end.js minimal,standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Persist session state after each response (Stop carries transcript_path)",
+        "id": "stop:session-end"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:evaluate-session scripts/hooks/evaluate-session.js minimal,standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Evaluate session for extractable patterns",
+        "id": "stop:evaluate-session"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:cost-tracker scripts/hooks/cost-tracker.js minimal,standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Track token and cost metrics per session",
+        "id": "stop:cost-tracker"
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js stop:desktop-notify scripts/hooks/desktop-notify.js minimal,standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Send desktop notification (macOS/WSL) with task summary when Claude responds",
+        "id": "stop:desktop-notify"
+      }
+    ],
+    "SessionEnd": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node scripts/hooks/plugin-hook-bootstrap.js session:end:marker scripts/hooks/session-end-marker.js minimal,standard,strict",
+            "async": true,
+            "timeout": 10
+          }
+        ],
+        "description": "Session end lifecycle marker (non-blocking)",
+        "id": "session:end:marker"
+      }
+    ]
+  }
+}
